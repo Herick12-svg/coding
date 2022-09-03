@@ -6,7 +6,9 @@ export const storage = new MMKV({
 })
 
 export function setItem(key, value) {
-    storage.set(key, JSON.stringify(value))
+    if (value) {
+        storage.set(key, JSON.stringify(value))
+    }
 }
 
 export function getItem(key) {
@@ -25,5 +27,6 @@ export const Keys = {
     userId: 'id',
     Name: 'name',
     Token: 'token',
-    Role: 'role'
+    Role: 'role',
+    ProfilePic: 'profilePic'
 }
