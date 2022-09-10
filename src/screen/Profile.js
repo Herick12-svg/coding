@@ -1,5 +1,5 @@
-import React, { useState} from "react";
-import { ImageBackground, StyleSheet, Text, View , Image, TextInput, Button, ImagePickerIOS} from "react-native";
+import React, { useState, useEffect} from "react";
+import { ImageBackground, StyleSheet, Text, View , Image, TextInput, Button, TouchableOpacity} from "react-native";
 import { getItem, Keys, setItem} from '../libs/storage';
 import {update, uploadProfile} from '../libs/api';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -22,16 +22,27 @@ export default function Profile(props) {
   const onChangePassword = (e) => {
       setPassword(e.nativeEvent.text);
   }
+
+  useEffect(() => {
+    console.log(id)
+    console.log('profiel : '  +  profile)
+    console.log('in porfile')
+}, [])
  
 
   const browsePhoto = () => {
-    options = {
+    
+    const options = {
+      mediaType: 'photo'
+      
     }
     launchImageLibrary(options, async response => {
-      if (response.uri) {
-        console.log(response)
-        setProfilePic(response.uri)
-        const Response = await uploadProfile(id, profilePic)
+      console.log(response)
+      console.log('response', response)
+      if (response) {
+        const file = response.assets[0]
+        console.log(file)
+        const Response = await uploadProfile(id, file)
         if(!response.error) {
           setItem(Keys.ProfilePic, Response.profile)
         }
@@ -64,33 +75,39 @@ export default function Profile(props) {
 return (
 
   <View style={styles.container}>
-    <Text>Edit</Text>
+    <Text style={styles.textMargin}>Edit</Text>
+    <TouchableOpacity onPress={browsePhoto}>
+      <Image source={require('../picture/profile.png') } style={styles.image} onPress={browsePhoto}/>
+    </TouchableOpacity>
     
-    <Image source = {require('../picture/profile.png')} style={styles.image} ></Image>
     {
-      //!profile ? <Image source = {require('../picture/profile.png')} style={styles.image} ></Image> : <Image source = {require(profile)} style={styles.image}></Image>
+      //!profile ? <Image source = require('../picture/profile.png')} style={styles.image} ></Image> : <Image source = {require(profile)} style={styles.image}></Image>
     }
-      <Button title ='choose photo' onPress={browsePhoto}></Button>
-      <TextInput
-            value={username}
-            //disabled
+      <View style={styles.container2}>
+        <Text style={styles.text}>Username : </Text>
+        <TextInput  style={styles.border} value={username}/>
+      </View>
 
-        >  
-        </TextInput>
 
+      <View style={styles.container2}>
+        <Text style={styles.text}>Password : </Text>
         <TextInput 
             placeholder='input your new password'
             secureTextEntry={true}
             onSubmitEditing={onChangePassword}
-        >
-        </TextInput>
+        />
+      </View>
+      
+      <View style={styles.container2}>
+        <Text style={styles.text}>Name : </Text>
         <TextInput 
             placeholder='input your new name'
             onSubmitEditing={onChangeName}
-        >
-        </TextInput>
+        />
+      </View>
 
         <Button
+        style={styles.Button}
         title='Update' 
         onPress={onUpdate}
         >
@@ -110,16 +127,38 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
     
    },
+   container2: {
+     flex: 0,
+     alignItems: 'center',
+     flexDirection: 'row',
+
+   },
    image: {
-    marginTop:'20px',
-    marginBottom:'30px',
     resizeMode: "contain",
     height: 200,
-    width: 400
+    width: 400,
+    marginBottom:20
+   },
+   text:{
+    fontWeight: 'bold',
+    fontSize: 17,
+    color: '#000000',
+   },
+   textMargin: {
+     marginBottom:20,
+     fontSize: 30,
+     fontWeight: 'bold',
+     fontStyle: 'italic',
+     color: '#000000',
+     textDecorationLine: 'underline',
+   },
+   Button: {
+    backgroundColor: 'black',
    }
+
+
   
 
 
 
 });
-

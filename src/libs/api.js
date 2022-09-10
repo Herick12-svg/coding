@@ -21,14 +21,23 @@ export function update(id, name, password) {
         }).catch((err) => reject(err))
     })
 }
+
 export function uploadProfile(id, file) {
     return new Promise((resolve, reject) => {
-        // For files we use FormData
-        const formData = new Formdata();
-        formData.append('file' ,file)
-        axios.post(`${URL}/user/${id}/project`, formData, {
+        // For files, we use FormData
+        const formData = new FormData();
+        console.log('uploading profile ........')
+        formData.append('file', {
+            name: file.fileName,
+            type: file.type,
+            uri: Platform.OS === 'ios' ? file.uri.replace('file://', '') : file.uri
+        });
+        formData.append('id', id);        
+
+        // Usually: Default Content-Type: application/json
+        axios.post(`${URL}/user/${id}/profile`, formData, {
             headers: {
-                "Content-Type": 'multipart/form-data'
+                'Content-Type': 'multipart/form-data'
             }
         }).then((res) => {
             resolve(res.data)
