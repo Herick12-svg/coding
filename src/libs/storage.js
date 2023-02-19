@@ -28,5 +28,6 @@ export const Keys = {
     Name: 'name',
     Token: 'token',
     Role: 'role',
-    ProfilePic: 'profilePic'
+    ProfilePic: 'profilePic',
+    pushToken: 'pushToken',
 }

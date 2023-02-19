@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 
 import{View, StyleSheet, TextInput, Button, Text, ImagePropTypes, ImageBackground} from 'react-native'
-import { setItem, Keys} from '../libs/storage';
+import { setItem, Keys, getItem} from '../libs/storage';
 import {login, uploadProfile} from '../libs/api';
 
 const style = StyleSheet.create({
@@ -9,9 +9,35 @@ const style = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      backgroundColor: "#5C9377"
       
      },
+     Text: {
+         fontWeight: "bold",
+         fontSize: 30,
+         textDecorationLine: "underline",
+         marginBottom:10
+
+     },
+     button: {
+        marginTop: 50,
+        color: "#000000"
+     },
+     input: {
+        height:35,
+        borderWidth:1,
+        padding:4,
+        marginTop: 10,
+        marginBottom: 20,
+        width:160,
+        textAlign: "center",
+        
+
+
+        
+    },
+
    
 
        
@@ -23,6 +49,7 @@ export  default function Login(props) {
     const [password, setPassword] = useState('')
     const userRef = useRef()
     const pwdRef = useRef()
+    const pushToken = getItem(Keys.pushToken);
     
    
     useEffect(() => {
@@ -45,7 +72,7 @@ export  default function Login(props) {
 
           //Authenticate 
 
-          const response = await login(username ,password)
+          const response = await login(username ,password, pushToken)
           const data = response.data
           const token = response.token
           if(!response.error) {
@@ -55,6 +82,7 @@ export  default function Login(props) {
             console.log(Keys.Name, data.name)
             console.log(Keys.Token, token)
             console.log(Keys.Role, data.role)
+            
 
             setItem(Keys.Username, username);
             setItem(Keys.userId, data._id)
@@ -76,29 +104,32 @@ export  default function Login(props) {
     return (
         
         <View style={style.container}>
-            <Text>Login</Text>
+            <Text style={style.Text}>Login</Text>
             {/* {
                 //if username not herick => <div>not herick</div> but if name is herick => <div>hi herick</div>
                 username!='herick'?<div>not herick</div>:<div>hi herick</div>
             } */}
             
             <TextInput
-                placeholder='input username'
+                style={style.input}
+                placeholder="Input Username"
+                placeholderTextColor="#000000"
                 onSubmitEditing={onChangeUsername}
                 ref = {userRef}
-                >
-                
-
-            </TextInput>
+            /> 
             
             <TextInput 
-                placeholder='input password'
+                style={style.input}
+                placeholder='Input Password'
+                placeholderTextColor="#000000"
                 secureTextEntry={true}
                 onSubmitEditing={onChangePassword}
                 ref = {pwdRef}>
             </TextInput>
 
             <Button 
+            color = "#40305D"
+            style = {style.button}
             title='Login' 
             onPress={onLogin}>
             </Button>
@@ -108,4 +139,3 @@ export  default function Login(props) {
         </View>
     )
 }
-

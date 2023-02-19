@@ -43,6 +43,8 @@ export default function Profile(props) {
         const file = response.assets[0]
         console.log(file)
         const Response = await uploadProfile(id, file)
+        setProfilePic(Response.profile)
+        console.log(profilePic)
         if(!response.error) {
           setItem(Keys.ProfilePic, Response.profile)
         }
@@ -77,15 +79,13 @@ return (
   <View style={styles.container}>
     <Text style={styles.textMargin}>Edit</Text>
     <TouchableOpacity onPress={browsePhoto}>
-      <Image source={require('../picture/profile.png') } style={styles.image} onPress={browsePhoto}/>
+      {/* <Image source={require('../picture/profile.png') } style={styles.image} onPress={browsePhoto}/> */}
+      {!profilePic ? <Image source = {require('../picture/profile.png')} style={styles.image} onPress={browsePhoto} ></Image> : <Image source = {profilePic} style={styles.image} onPress={browsePhoto}></Image>}
     </TouchableOpacity>
-    
-    {
-      //!profile ? <Image source = require('../picture/profile.png')} style={styles.image} ></Image> : <Image source = {require(profile)} style={styles.image}></Image>
-    }
+  
       <View style={styles.container2}>
         <Text style={styles.text}>Username : </Text>
-        <TextInput  style={styles.border} value={username}/>
+        <TextInput  value={username}/>
       </View>
 
 

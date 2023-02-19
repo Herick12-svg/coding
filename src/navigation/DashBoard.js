@@ -1,13 +1,27 @@
 import React from 'react'
+import{View, StyleSheet, TextInput, Button, Text, ImagePropTypes, ImageBackground} from 'react-native'
 import {createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileScreen from '../screen/Profile'
 import CameraScreen from '../screen/Camera'
+import TaskList from '../screen/TaskList'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import Task from '../screen/Task';
 
 
 const Tab = createBottomTabNavigator();
 
+const style = StyleSheet.create({
+  text: {
+    alignItems: 'center',
+    justifyContent: 'center'
+    
+   }
+   
+  });
+
+
 export default function DashBoard() {
+  console.log('in to dashboard')
 
     return (
         <Tab.Navigator
@@ -19,8 +33,12 @@ export default function DashBoard() {
                     iconName = focused
                     ? 'camera'
                     : 'camera-outline';
-                } else if (route.name === 'Profile') {
+                } 
+                else if (route.name === 'Profile') {
                     iconName = focused ? 'person-circle' : 'person-circle-outline';
+                }
+                else if (route.name === 'TaskList') {
+                  iconName = 'reader-outline';
                 }
                 
 
@@ -41,10 +59,18 @@ export default function DashBoard() {
                  { headerShown: false}
                 }
               />
+           <Tab.Screen 
+              name="TaskList" 
+              component={Task} 
+              
+              />
           </Tab.Navigator>
      
   
     );
+   
+
+    
 
   }
   
