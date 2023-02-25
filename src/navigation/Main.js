@@ -9,6 +9,7 @@ import { setItem, Keys} from "../libs/storage";
 import inAppMessaging from '@react-native-firebase/in-app-messaging';
 import {sendLocalPushNotification} from "../libs/localNotification"
 import PushNotification from "react-native-push-notification";
+import SignUp from "../screen/SignUp";
 
 
 
@@ -194,8 +195,13 @@ function Main() {
                         component = {DashBoard}
 
                       >
+                      
                         
-                      </Stack.Screen>
+          </Stack.Screen>
+          <Stack.Screen
+              name="SignUp"
+              component={SignUp}>
+          </Stack.Screen>
 
                       
                       

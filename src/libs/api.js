@@ -3,14 +3,28 @@ import { Keys, getItem, } from './storage';
 import { storage } from 'firebase-admin';
 export const URL = 'http://192.168.1.125:5000'
 const Token = getItem(Keys.Token);
-const userId = getItem(Keys.userId)
 
+export function setToken(token) {
+	if (token && token.length > 0) {
+		axios.defaults.headers.common['Authorization'] = `bearer ${token}`
+			}
+}
 
 
 export function login(username, password) {
     return new Promise((resolve, reject) => {
         axios.post(`${URL}/auth/login` , {
             username, password
+        }).then((res) => {
+            //we use res.data so we can directry get the data
+            resolve(res.data)
+        }).catch((err) => reject(err))
+    })
+}
+export function signup(username, password, name) {
+    return new Promise((resolve, reject) => {
+        axios.post(`${URL}/auth/signup` , {
+            username, password, name
         }).then((res) => {
             //we use res.data so we can directry get the data
             resolve(res.data)
@@ -52,9 +66,6 @@ export function uploadProfile(id, file) {
 export function addTasked(description, dueDate, user) {
     return new Promise ((resolve, reject) => {
         axios.post(`${URL}/tasklist/add`, {
-            headers:{
-                'Authorization': `bearer ${Token}`
-            },
             description, dueDate, user
         }).then((res) => {
             resolve(res)
@@ -64,25 +75,18 @@ export function addTasked(description, dueDate, user) {
 
     })
 }
-export function getTaskList() {
+export function getTaskList(userId) {
     return new Promise ((resolve, reject) => {
+        console.log("getTaskList",`${URL}/tasklist/${userId}/obtain`)
         axios.post(`${URL}/tasklist/${userId}/obtain`, {
-            headers:{
-                'Authorization': `bearer ${Token}`
-            },
         }).then((res) => {
+            console.log("respose",res)
             resolve(res)
-            console.log(res)
+           
         
         }).catch((err)=> reject(err))
 
     })
 }
 
-export function setToken(token) {
-    if (token && token.length > 0) {
-        axios.defaults.headers.common['Authorization'] = `bearer ${token}`
-        cookies.set(Config.storage.TOKEN_KEY, token)
-    }
-}
 

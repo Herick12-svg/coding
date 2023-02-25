@@ -81,7 +81,7 @@ export default function Task() {
     useEffect( () => {
         tommorows()
         getItems()
-        console.log("userId",userId)
+        console.log("userId",userId) 
 
 
     }, [])
@@ -92,7 +92,7 @@ export default function Task() {
         console.log("hehllo")
     }
     const getItems = async () => {
-        const response = await getTaskList()
+        const response = await getTaskList(userId)
         console.log("getTaskList ====",response)
     }
 

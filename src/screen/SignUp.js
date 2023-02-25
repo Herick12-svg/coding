@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 
 import{View, StyleSheet, TextInput, Button, Text, ImagePropTypes, ImageBackground} from 'react-native'
 import { setItem, Keys, getItem} from '../libs/storage';
-import {login, uploadProfile, setToken} from '../libs/api';
+import {signup, uploadProfile} from '../libs/api';
 
 const style = StyleSheet.create({
     container: {
@@ -22,7 +22,6 @@ const style = StyleSheet.create({
      },
      button: {
         marginTop: 50,
-        marginBottom: 100,
         color: "#000000"
      },
      input: {
@@ -38,22 +37,20 @@ const style = StyleSheet.create({
 
         
     },
-    buttons : {
-        marginTop: 50,
-        textDecorationColor:"#00008B"
-    }
 
    
 
        
   });
 
-export  default function Login(props) {
+export  default function SignUp(props) {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const userRef = useRef()
+    const [name, setName] = useState('')
+    const nameRef = useRef()
     const pwdRef = useRef()
+    const userRef = useRef()
     const pushToken = getItem(Keys.pushToken);
     
    
@@ -70,55 +67,33 @@ export  default function Login(props) {
     const onChangePassword = (e) => {
         setPassword(e.nativeEvent.text);
     }
-    const onLogin = async () => {
-    console.log(username)
-      if (username.length >= 5 && password.length >= 5)
-      {
-
-          //Authenticate 
-
-          const response = await login(username ,password, pushToken)
-          const data = response.data
-          const token = response.token
-          if(!response.error) {
-            console.log(data)
-            console.log(Keys.Username, username);
-            console.log(Keys.userId, data._id)
-            console.log(Keys.Name, data.name)
-            console.log(Keys.Token, token)
-            console.log(Keys.Role, data.role)
-            
-
-            setItem(Keys.Username, username);
-            setItem(Keys.userId, data._id)
-            setItem(Keys.Name, data.name)
-            setItem(Keys.Token, token)
-            setItem(Keys.Role, data.role)
-            setItem(Keys.ProfilePic, data.profile)
-            setToken(token)
-    
-            
-            props.navigation.navigate('DashBoard')
-            console.log('in')
-          }
-          
-        
-      }
+    const onChangeName = (e) => {
+        setName(e.nativeEvent.text);
     }
-    const toSignUp = () => {
-        props.navigation.navigate('SignUp')
+    const onSignUp = async () => {
+        if (username, password, name)
+            signup(username, password, name)
+        
+      
     }
 
 
     return (
         
         <View style={style.container}>
-            <Text style={style.Text}>Login</Text>
+            <Text style={style.Text}>Sign Up</Text>
             {/* {
                 //if username not herick => <div>not herick</div> but if name is herick => <div>hi herick</div>
                 username!='herick'?<div>not herick</div>:<div>hi herick</div>
             } */}
-            
+            <TextInput 
+                style={style.input}
+                placeholder='Input Name'
+                placeholderTextColor="#000000"
+                onSubmitEditing={onChangeName}
+                ref = {nameRef}>
+            </TextInput>
+
             <TextInput
                 style={style.input}
                 placeholder="Input Username"
@@ -136,19 +111,13 @@ export  default function Login(props) {
                 ref = {pwdRef}>
             </TextInput>
 
-            <Button 
-                color = "#40305D"
-                style = {style.button}
-                title='Login' 
-                onPress={onLogin}>
-            </Button>
-                
-            <Button
-                style = {style.buttons}
-                title = "no account yet? signup now"
-                onPress= {toSignUp}
-            >
+            
 
+            <Button 
+            color = "#40305D"
+            style = {style.button}
+            title='SignUp' 
+            onPress={onSignUp}>
             </Button>
 
             
